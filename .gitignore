@@ -1,0 +1,36 @@
+# Ignore node_modules directory
+node_modules/
+
+# Ignore build output
+dist/
+
+# Ignore IDE and editor files
+.vscode/
+.idea/
+
+# Ignore log files
+*.log
+
+# Ignore temporary files
+*.tmp
+
+# Ignore environment-specific files
+.env
+
+# Ignore compiled binaries or executables
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Ignore package-lock.json for npm
+package-lock.json
+
+# Ignore yarn.lock for Yarn
+yarn.lock
+
+# Ignore .DS_Store files on macOS
+.DS_Store
+
+# Ignore Python bytecode cache
+__pycache__/

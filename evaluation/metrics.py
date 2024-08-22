@@ -41,9 +41,18 @@ def get_tp_fp_fn_tn(y_true, y_pred):
 
 
 def evaluate(prediction: dict, ground_truth: dict):
-    y_true = np.array(list(ground_truth.values()))
-    # ensure that the order is the same for y_true and y_pred_prob!
-    y_pred_prob = np.array([prediction[key] for key in ground_truth])
+    y_true = []
+    y_pred_prob = []
+    for patient, cases in ground_truth.items():
+        for case, meta in cases.items():
+            y_true.append(meta["response"])
+            try:
+                y_pred_prob.append(prediction[patient][case]["response"])
+            except KeyError:
+                y_pred_prob.append([0., 0., 0., 0.])
+
+    y_true = np.array(y_true)
+    y_pred_prob = np.array(y_pred_prob)
 
     y_pred = np.argmax(y_pred_prob, axis=1)
 
@@ -56,7 +65,7 @@ def evaluate(prediction: dict, ground_truth: dict):
 
         tp, fp, fn, tn = get_tp_fp_fn_tn(cls_true, cls_pred)
 
-        metrics[f'class_{cls}'] = {
+        metrics[response_mapping[cls]] = {
             'tp': int(tp),
             'fp': int(fp),
             'fn': int(fn),
@@ -77,7 +86,7 @@ def main():
     parser.add_argument("prediction_file", type=Path, help="Path to the file with the predictions")
     parser.add_argument("ground_truth_file", type=Path, help="Path to the file with the ground truth")
     parser.add_argument("output_file", type=Path, help="Path to the output file")
-    args = parser.parse_args()
+    args = parser.parse_args(("/home/y033f/DataDrive/BraTPRO/test_docker/validation/prediction/prediction.json /home/y033f/DataDrive/BraTPRO/test_docker/validation/training/patients.json /home/y033f/DataDrive/BraTPRO/test_docker/validation/output.json").split())
     with open(args.prediction_file, 'r') as f:
         prediction = json.load(f)
     with open(args.ground_truth_file, 'r') as f:

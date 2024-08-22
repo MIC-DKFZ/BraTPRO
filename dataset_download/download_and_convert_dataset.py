@@ -42,9 +42,7 @@ def download_dataset(lumiere_path: Path):
     subprocess.run(command)
 
 
-def convert_dataset(lumiere_path: Path, n_pr: int = None):
-    if n_pr is None:
-        n_pr = min(16, multiprocessing.cpu_count()-2)
+def convert_dataset(lumiere_path: Path, n_pr: int = min(16, multiprocessing.cpu_count()-2)):
     complete_cases = {}
     for patient in sorted((lumiere_path / 'Imaging').iterdir()):
         for visit in sorted(patient.iterdir()):

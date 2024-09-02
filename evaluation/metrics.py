@@ -53,6 +53,8 @@ def evaluate(prediction: dict, ground_truth: dict):
 
     y_true = np.array(y_true)
     y_pred_prob = np.array(y_pred_prob)
+    # ensure correct shape of predictions
+    y_pred_prob = y_pred_prob.reshape(-1, 4)
 
     y_pred = np.argmax(y_pred_prob, axis=1)
 
@@ -86,7 +88,7 @@ def main():
     parser.add_argument("prediction_file", type=Path, help="Path to the file with the predictions")
     parser.add_argument("ground_truth_file", type=Path, help="Path to the file with the ground truth")
     parser.add_argument("output_file", type=Path, help="Path to the output file")
-    args = parser.parse_args(("/home/y033f/DataDrive/BraTPRO/test_docker/validation/prediction/prediction.json /home/y033f/DataDrive/BraTPRO/test_docker/validation/training/patients.json /home/y033f/DataDrive/BraTPRO/test_docker/validation/output.json").split())
+    args = parser.parse_args()
     with open(args.prediction_file, 'r') as f:
         prediction = json.load(f)
     with open(args.ground_truth_file, 'r') as f:

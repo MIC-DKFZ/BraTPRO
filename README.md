@@ -2,10 +2,10 @@ _Copyright © German Cancer Research Center (DKFZ) and contributors. Please make
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
 ---
-# BraTPRO Challenge (MICCAI 2024)
+# BraTPRO Challenge (MICCAI 2025)
 
-This repository contains the code related to our MICCAI 2024 Brain Tumor Progression Challenge (BraTPRO).
-Also checkout the challenge [Website](https://www.synapse.org/bratpro)
+This repository contains the code related to Task 11 - Predicting the Tumor Response During Therapy - of the BraTS-Lighthouse 2025 Challenge.
+Also checkout the challenge [Website](https://www.synapse.org/Synapse:syn64153130/wiki/631459)
 
 ### Requirements
 
@@ -30,3 +30,29 @@ where `dataset_location` is the path where the dataset should be saved.<br>
 ### Evaluation
 
 Code for the metircs used in the challenge evaluation can be found in `evaluation/metrics.py`
+
+### Submission
+
+Algorithms need to be submitted via docker, with the following script implemented:
+```
+/workspace/run_inference.sh test_data_dir pred_dir
+```
+Submitted docker images will then be executed via the following docker command:
+```
+docker run --gpus all -v "test_data_dir:/mnt/test_data" -v "pred_dir:/mnt/pred" --read-only docker-image-name /workspace/run_inference.sh /mnt/test_data /mnt/pred
+```
+
+In order to submit your docker image to the challenge, you will first need to create a project on synapse and give it a meaningful name (this is not required but advised). This project will have a unique Project ID (e.g. syn12345678), which you will need in the following.
+After creating your docker image locally, you can upload it to the synapse docker registry
+
+```
+docker login docker.synapse.org
+docker tag docker_imagename docker.synapse.org/synapse_project_ID/docker_imagename
+docker push docker.synapse.org/synapse_project_ID/docker_imagename:latest
+```
+
+In order to submit the uploaded Docker image you need to:
+
+- go to your project -> Docker and choose the Docker image you want to submit
+- click on Docker Repository Tools -> Submit Docker Repository to Challenge
+- choose the correct tag and the evaluation queue you want to submit to
